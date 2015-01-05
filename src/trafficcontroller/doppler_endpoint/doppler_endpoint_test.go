@@ -23,6 +23,18 @@ var _ = Describe("NewDopplerEndpoint", func() {
 			Expect(dopplerEndpoint.Timeout).To(Equal(5 * time.Second))
 		})
 	})
+	Context("when endpoint is 'containermetrics'", func() {
+		It("uses an HTTP handler", func() {
+			dopplerEndpoint := doppler_endpoint.NewDopplerEndpoint("containermetrics", "abc123", true)
+			knownHttpHandler := handlers.NewHttpHandler(nil, nil)
+			Expect(dopplerEndpoint.HProvider(nil, nil)).To(BeAssignableToTypeOf(knownHttpHandler))
+		})
+
+		It("sets a timeout of five seconds", func() {
+			dopplerEndpoint := doppler_endpoint.NewDopplerEndpoint("containermetrics", "abc123", true)
+			Expect(dopplerEndpoint.Timeout).To(Equal(5 * time.Second))
+		})
+	})
 
 	Context("when endpoint is not 'recentlogs'", func() {
 		dopplerEndpoint := doppler_endpoint.NewDopplerEndpoint("firehose", "firehose", true)

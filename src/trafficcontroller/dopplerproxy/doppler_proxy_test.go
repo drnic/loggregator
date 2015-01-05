@@ -160,6 +160,16 @@ var _ = Describe("ServeHTTP", func() {
 			Eventually(channelGroupConnector.getReconnect).Should(BeFalse())
 		})
 
+		It("connects to doppler servers without reconnecting for containermetrics", func() {
+			close(channelGroupConnector.messages)
+			req, _ := http.NewRequest("GET", "/apps/abc123/containermetrics", nil)
+			req.Header.Add("Authorization", "token")
+
+			proxy.ServeHTTP(recorder, req)
+
+			Eventually(channelGroupConnector.getReconnect).Should(BeFalse())
+		})
+
 		It("passes messages back to the requestor", func() {
 			channelGroupConnector.messages <- []byte("hello")
 			channelGroupConnector.messages <- []byte("goodbye")

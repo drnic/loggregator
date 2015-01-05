@@ -28,7 +28,7 @@ func NewDopplerEndpoint(
 
 	var hProvider HandlerProvider
 	var timeout time.Duration
-	if endpoint == "recentlogs" {
+	if endpoint == "recentlogs" || endpoint == "containermetrics" {
 		hProvider = HttpHandlerProvider
 		timeout = HttpRequestTimeout
 	} else {
